@@ -98,8 +98,8 @@ export function MiningTable({ workers, rewards }: MiningTableProps) {
                 <TableRow key={reward.id}>
                   <TableCell>{reward.id}</TableCell>
                   <TableCell>{reward.userId}</TableCell>
-                  <TableCell>{reward.amount.toFixed(8)} {reward.coinSymbol}</TableCell>
-                  <TableCell>{formatPrice(reward.amount * reward.coinPrice)}</TableCell>
+                  <TableCell>{reward.amount.toFixed(8)} BTC</TableCell>
+                  <TableCell>{formatPrice(reward.amount * 84000)}</TableCell>
                   <TableCell>{formatDate(reward.timestamp)}</TableCell>
                 </TableRow>
               ))

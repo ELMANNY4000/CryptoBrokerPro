@@ -47,7 +47,8 @@ export function AssetsTable({ assets }: AssetsTableProps) {
                 {formatNumber(asset.amount)}
               </TableCell>
               <TableCell className="text-right">
-                {formatPrice(asset.amount * asset.lastKnownPrice)}
+                {/* Placeholder for value - we'll need to fetch current price from API */}
+                {formatPrice(asset.amount * 0)}
               </TableCell>
               <TableCell>
                 {new Date(asset.updatedAt).toLocaleDateString()}
