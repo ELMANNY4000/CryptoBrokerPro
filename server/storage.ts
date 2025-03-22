@@ -18,25 +18,31 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  getAllUsers(): Promise<User[]>;
+  updateUserRole(userId: number, role: string): Promise<User | undefined>;
   
   // Portfolio operations
   getPortfolioAssets(userId: number): Promise<PortfolioAsset[]>;
   getPortfolioAsset(userId: number, coinId: string): Promise<PortfolioAsset | undefined>;
   createOrUpdatePortfolioAsset(asset: InsertPortfolioAsset): Promise<PortfolioAsset>;
+  getAllPortfolioAssets(): Promise<PortfolioAsset[]>;
   
   // Transaction operations
   getTransactions(userId: number, limit?: number): Promise<Transaction[]>;
   createTransaction(transaction: InsertTransaction): Promise<Transaction>;
+  getAllTransactions(limit?: number): Promise<Transaction[]>;
   
   // Mining worker operations
   getMiningWorkers(userId: number): Promise<MiningWorker[]>;
   getMiningWorker(id: number): Promise<MiningWorker | undefined>;
   createMiningWorker(worker: InsertMiningWorker): Promise<MiningWorker>;
   updateMiningWorker(id: number, worker: Partial<InsertMiningWorker>): Promise<MiningWorker | undefined>;
+  getAllMiningWorkers(): Promise<MiningWorker[]>;
   
   // Mining reward operations
   getMiningRewards(userId: number, limit?: number): Promise<MiningReward[]>;
   createMiningReward(reward: InsertMiningReward): Promise<MiningReward>;
+  getAllMiningRewards(limit?: number): Promise<MiningReward[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -68,16 +74,27 @@ export class MemStorage implements IStorage {
     this.initializeDefaultData();
   }
 
-  private initializeDefaultData() {
+  private async initializeDefaultData() {
     // Create default user
     const defaultUser: InsertUser = {
       username: "demo",
       password: "password123", // In a real app, this would be hashed
       email: "demo@example.com",
-      walletAddress: `0x${randomUUID().replace(/-/g, '')}`
+      walletAddress: `0x${randomUUID().replace(/-/g, '')}`,
+      role: "user"
     };
 
-    const user = this.createUser(defaultUser);
+    // Create admin user
+    const adminUser: InsertUser = {
+      username: "admin",
+      password: "admin123", // In a real app, this would be hashed
+      email: "admin@example.com",
+      walletAddress: `0x${randomUUID().replace(/-/g, '')}`,
+      role: "admin"
+    };
+
+    const user = await this.createUser(defaultUser);
+    await this.createUser(adminUser);
 
     // Create default portfolio assets
     const defaultAssets: InsertPortfolioAsset[] = [
@@ -266,6 +283,45 @@ export class MemStorage implements IStorage {
     };
     this.miningRewards.set(id, newReward);
     return newReward;
+  }
+
+  // Admin operations
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.users.values());
+  }
+
+  async updateUserRole(userId: number, role: string): Promise<User | undefined> {
+    const user = await this.getUser(userId);
+    if (!user) return undefined;
+
+    const updatedUser: User = {
+      ...user,
+      role
+    };
+    this.users.set(userId, updatedUser);
+    return updatedUser;
+  }
+
+  async getAllPortfolioAssets(): Promise<PortfolioAsset[]> {
+    return Array.from(this.portfolioAssets.values());
+  }
+
+  async getAllTransactions(limit?: number): Promise<Transaction[]> {
+    const allTransactions = Array.from(this.transactions.values())
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    
+    return limit ? allTransactions.slice(0, limit) : allTransactions;
+  }
+
+  async getAllMiningWorkers(): Promise<MiningWorker[]> {
+    return Array.from(this.miningWorkers.values());
+  }
+
+  async getAllMiningRewards(limit?: number): Promise<MiningReward[]> {
+    const allRewards = Array.from(this.miningRewards.values())
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    
+    return limit ? allRewards.slice(0, limit) : allRewards;
   }
 }
 
