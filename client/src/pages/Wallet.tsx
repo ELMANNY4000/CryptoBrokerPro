@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { Transaction } from "@shared/schema";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Transaction } from "../../shared/schema";
 import { 
   Card, 
   CardContent, 
@@ -7,22 +8,44 @@ import {
   CardFooter, 
   CardHeader, 
   CardTitle 
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import { 
   ArrowUp, 
   ArrowDown, 
   Copy, 
   ExternalLink, 
-  DollarSign 
+  DollarSign,
+  CheckCircle,
+  CreditCard,
+  Loader2
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { usePortfolio } from "@/hooks/usePortfolio";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "../hooks/use-toast";
+import { usePortfolio } from "../hooks/usePortfolio";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { motion } from "framer-motion";
+import { apiRequest } from "../lib/queryClient";
+import { COIN_COLORS } from "../lib/constants";
 
 const Wallet = () => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  
+  const [selectedCurrency, setSelectedCurrency] = useState("BTC");
+  const [depositAmount, setDepositAmount] = useState("");
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [destAddress, setDestAddress] = useState("");
+  const [depositMethod, setDepositMethod] = useState<"crypto" | "card">("crypto");
+  const [depositStep, setDepositStep] = useState(1);
+  const [cardDetails, setCardDetails] = useState({
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
+    name: ""
+  });
+  const [processingDeposit, setProcessingDeposit] = useState(false);
+  const [processingWithdrawal, setProcessingWithdrawal] = useState(false);
   
   const { data: user } = useQuery({
     queryKey: ["/api/user"],
@@ -32,7 +55,200 @@ const Wallet = () => {
     queryKey: ["/api/transactions"],
   });
   
-  const { totalPortfolioValue } = usePortfolio();
+  const { totalPortfolioValue, portfolioAssets } = usePortfolio();
+  
+  // Simulated mutation for deposit
+  const depositMutation = useMutation({
+    mutationFn: async (data: { 
+      coinId: string; 
+      symbol: string; 
+      amount: number; 
+      method: string;
+    }) => {
+      // Simulate API call latency
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            transaction: {
+              id: Math.floor(Math.random() * 1000),
+              type: "deposit",
+              amount: data.amount,
+              coinId: data.coinId,
+              symbol: data.symbol,
+              price: data.coinId === "bitcoin" ? 84000 : 
+                     data.coinId === "ethereum" ? 2000 :
+                     data.coinId === "tether" ? 1 : 400,
+              timestamp: new Date().toISOString()
+            }
+          });
+        }, 1500);
+      });
+    },
+    onSuccess: () => {
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/portfolio"] });
+      
+      toast({
+        title: "Deposit Successful",
+        description: `${depositAmount} ${selectedCurrency} has been added to your wallet`,
+        variant: "default",
+      });
+      
+      setProcessingDeposit(false);
+      setDepositAmount("");
+      setDepositStep(1);
+      setCardDetails({
+        cardNumber: "",
+        expiryDate: "",
+        cvv: "",
+        name: ""
+      });
+    }
+  });
+  
+  // Simulated mutation for withdrawal
+  const withdrawMutation = useMutation({
+    mutationFn: async (data: { 
+      coinId: string; 
+      symbol: string; 
+      amount: number; 
+      address: string;
+    }) => {
+      // Simulate API call latency
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // Check if user has enough funds
+          const asset = portfolioAssets?.find(a => a.symbol === data.symbol);
+          
+          if (!asset || asset.amount < data.amount) {
+            reject(new Error("Insufficient funds"));
+            return;
+          }
+          
+          resolve({
+            success: true,
+            transaction: {
+              id: Math.floor(Math.random() * 1000),
+              type: "withdrawal",
+              amount: -data.amount,
+              coinId: data.coinId,
+              symbol: data.symbol,
+              price: data.coinId === "bitcoin" ? 84000 : 
+                     data.coinId === "ethereum" ? 2000 :
+                     data.coinId === "tether" ? 1 : 400,
+              timestamp: new Date().toISOString()
+            }
+          });
+        }, 1500);
+      });
+    },
+    onSuccess: () => {
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ["/api/transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/portfolio"] });
+      
+      toast({
+        title: "Withdrawal Successful",
+        description: `${withdrawAmount} ${selectedCurrency} has been sent to the specified address`,
+        variant: "default",
+      });
+      
+      setProcessingWithdrawal(false);
+      setWithdrawAmount("");
+      setDestAddress("");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Withdrawal Failed",
+        description: error.message || "An error occurred",
+        variant: "destructive",
+      });
+      setProcessingWithdrawal(false);
+    }
+  });
+  
+  const handleDeposit = () => {
+    if (!depositAmount || isNaN(Number(depositAmount)) || Number(depositAmount) <= 0) {
+      toast({
+        title: "Invalid Amount",
+        description: "Please enter a valid amount to deposit",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (depositMethod === "card" && depositStep === 1) {
+      setDepositStep(2);
+      return;
+    }
+    
+    if (depositMethod === "card" && depositStep === 2) {
+      // Validate card details
+      if (
+        !cardDetails.cardNumber || 
+        !cardDetails.expiryDate || 
+        !cardDetails.cvv || 
+        !cardDetails.name
+      ) {
+        toast({
+          title: "Missing Details",
+          description: "Please fill in all card details",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+    
+    setProcessingDeposit(true);
+    
+    // Map currency symbol to coinId
+    const coinId = selectedCurrency === "BTC" ? "bitcoin" : 
+                  selectedCurrency === "ETH" ? "ethereum" :
+                  selectedCurrency === "USDT" ? "tether" : "binancecoin";
+    
+    depositMutation.mutate({
+      coinId,
+      symbol: selectedCurrency,
+      amount: Number(depositAmount),
+      method: depositMethod
+    });
+  };
+  
+  const handleWithdrawal = () => {
+    if (!withdrawAmount || isNaN(Number(withdrawAmount)) || Number(withdrawAmount) <= 0) {
+      toast({
+        title: "Invalid Amount",
+        description: "Please enter a valid amount to withdraw",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!destAddress) {
+      toast({
+        title: "Missing Address",
+        description: "Please enter a destination address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setProcessingWithdrawal(true);
+    
+    // Map currency symbol to coinId
+    const coinId = selectedCurrency === "BTC" ? "bitcoin" : 
+                  selectedCurrency === "ETH" ? "ethereum" :
+                  selectedCurrency === "USDT" ? "tether" : "binancecoin";
+    
+    withdrawMutation.mutate({
+      coinId,
+      symbol: selectedCurrency,
+      amount: Number(withdrawAmount),
+      address: destAddress
+    });
+  };
   
   const copyWalletAddress = () => {
     if (user?.walletAddress) {
@@ -41,6 +257,27 @@ const Wallet = () => {
         title: "Address Copied",
         description: "Wallet address copied to clipboard",
       });
+    }
+  };
+  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+        duration: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
     }
   };
   

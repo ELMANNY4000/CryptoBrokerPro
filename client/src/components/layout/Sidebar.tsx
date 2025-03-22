@@ -37,7 +37,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-between p-4 border-b border-neutral-400">
           <h1 className="text-xl font-bold text-white">
-            <span className="text-primary">Crypto</span>Trader
+            <span className="text-primary">Trading</span>Desk
           </h1>
           <button 
             className="md:hidden text-neutral-200 hover:text-white"
