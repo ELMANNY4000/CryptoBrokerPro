@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UsersTable } from "@/components/admin/UsersTable";
-import { TransactionsTable } from "@/components/admin/TransactionsTable";
-import { AssetsTable } from "@/components/admin/AssetsTable";
-import { MiningTable } from "@/components/admin/MiningTable";
-import { DashboardStats } from "@/components/admin/DashboardStats";
+import { useToast } from "../../hooks/use-toast";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import { UsersTable } from "../../components/admin/UsersTable";
+import { TransactionsTable } from "../../components/admin/TransactionsTable";
+import { AssetsTable } from "../../components/admin/AssetsTable";
+import { MiningTable } from "../../components/admin/MiningTable";
+import { DashboardStats } from "../../components/admin/DashboardStats";
 import { Users, Clock, Wallet, Coins, BarChart3, LogOut, Settings } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -33,9 +33,13 @@ const AdminDashboard = () => {
     setAdminToken(token);
   }, [setLocation, toast]);
   
-  const requestHeaders = adminToken ? {
-    Authorization: adminToken,
-  } : {};
+  // Initialize requestHeaders with an empty object that meets Record<string, string> requirements
+  const requestHeaders: Record<string, string> = {};
+  
+  // Add Authorization only if adminToken exists
+  if (adminToken) {
+    requestHeaders.Authorization = adminToken;
+  }
   
   // Fetch admin data (users, transactions, etc.)
   const { data: users, isLoading: isLoadingUsers } = useQuery({

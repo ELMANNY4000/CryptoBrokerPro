@@ -51,18 +51,17 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
           <ul>
             {navItems.map((item) => (
               <li className="mb-1" key={item.path}>
-                <Link href={item.path}>
-                  <a 
-                    className={`flex items-center px-4 py-3 rounded-sm mx-2
-                      ${currentPath === item.path 
-                        ? "text-white bg-primary" 
-                        : "text-neutral-200 hover:bg-neutral-500"
-                      }`}
-                    onClick={closeSidebar}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </a>
+                <Link 
+                  href={item.path}
+                  className={`flex items-center px-4 py-3 rounded-sm mx-2
+                    ${currentPath === item.path 
+                      ? "text-white bg-primary" 
+                      : "text-neutral-200 hover:bg-neutral-500"
+                    }`}
+                  onClick={closeSidebar}
+                >
+                  {item.icon}
+                  {item.label}
                 </Link>
               </li>
             ))}
