@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Transaction } from "../../shared/schema";
+import { Transaction, User } from "@shared/schema";
 import { 
   Card, 
   CardContent, 
@@ -8,9 +8,9 @@ import {
   CardFooter, 
   CardHeader, 
   CardTitle 
-} from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { 
   ArrowUp, 
   ArrowDown, 
@@ -21,12 +21,12 @@ import {
   CreditCard,
   Loader2
 } from "lucide-react";
-import { useToast } from "../hooks/use-toast";
-import { usePortfolio } from "../hooks/usePortfolio";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { usePortfolio } from "@/hooks/usePortfolio";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
-import { apiRequest } from "../lib/queryClient";
-import { COIN_COLORS } from "../lib/constants";
+import { apiRequest } from "@/lib/queryClient";
+import { COIN_COLORS } from "@/lib/constants";
 
 const Wallet = () => {
   const { toast } = useToast();
@@ -47,7 +47,7 @@ const Wallet = () => {
   const [processingDeposit, setProcessingDeposit] = useState(false);
   const [processingWithdrawal, setProcessingWithdrawal] = useState(false);
   
-  const { data: user } = useQuery({
+  const { data: user } = useQuery<User>({
     queryKey: ["/api/user"],
   });
   
@@ -342,94 +342,360 @@ const Wallet = () => {
               </TabsList>
               
               <TabsContent value="deposit" className="mt-4">
-                <div className="bg-neutral-500 rounded-lg p-4">
-                  <p className="text-sm mb-4">Deposit crypto to your wallet by sending to your wallet address.</p>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Select Currency</label>
-                      <select className="w-full bg-neutral-400 border border-neutral-300 text-white rounded p-2">
-                        <option>Bitcoin (BTC)</option>
-                        <option>Ethereum (ETH)</option>
-                        <option>Tether (USDT)</option>
-                        <option>Binance Coin (BNB)</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Your Deposit Address</label>
-                      <div className="bg-neutral-400 rounded p-3 flex justify-between items-center">
-                        <span className="text-sm font-mono truncate">
-                          {user?.walletAddress || "Loading..."}
-                        </span>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={copyWalletAddress}
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-neutral-400 rounded-lg p-3">
-                      <p className="text-sm text-neutral-200">
-                        <strong>Note:</strong> This is a paper trading platform. No actual cryptocurrency transactions will occur. This interface simulates the deposit experience.
-                      </p>
-                    </div>
-                    
-                    <Button className="w-full">
+                <motion.div 
+                  className="bg-neutral-800 rounded-lg p-4 shadow-lg"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <div className="mb-4 flex items-center space-x-2">
+                    <Button 
+                      variant={depositMethod === "crypto" ? "default" : "outline"}
+                      className="w-1/2"
+                      onClick={() => {
+                        setDepositMethod("crypto");
+                        setDepositStep(1);
+                      }}
+                    >
                       <ArrowDown className="mr-2 h-4 w-4" />
-                      Simulate Deposit
+                      Crypto
+                    </Button>
+                    <Button 
+                      variant={depositMethod === "card" ? "default" : "outline"}
+                      className="w-1/2"
+                      onClick={() => {
+                        setDepositMethod("card");
+                        setDepositStep(1);
+                      }}
+                    >
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Card
                     </Button>
                   </div>
-                </div>
+                  
+                  {depositMethod === "crypto" ? (
+                    <motion.div 
+                      className="space-y-4"
+                      key="crypto-deposit"
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <motion.div variants={itemVariants}>
+                        <label className="block text-sm font-medium mb-1">Select Currency</label>
+                        <select 
+                          className="w-full bg-neutral-700 border border-neutral-600 text-white rounded-md p-2"
+                          value={selectedCurrency}
+                          onChange={(e) => setSelectedCurrency(e.target.value)}
+                        >
+                          <option value="BTC">Bitcoin (BTC)</option>
+                          <option value="ETH">Ethereum (ETH)</option>
+                          <option value="USDT">Tether (USDT)</option>
+                          <option value="BNB">Binance Coin (BNB)</option>
+                        </select>
+                      </motion.div>
+                      
+                      <motion.div variants={itemVariants}>
+                        <label className="block text-sm font-medium mb-1">Your Deposit Address</label>
+                        <div className="bg-neutral-700 border border-neutral-600 rounded-md p-3 flex justify-between items-center">
+                          <span className="text-sm font-mono truncate">
+                            {user?.walletAddress || "Loading..."}
+                          </span>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={copyWalletAddress}
+                          >
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </motion.div>
+                      
+                      <motion.div variants={itemVariants}>
+                        <label className="block text-sm font-medium mb-1">Amount to Deposit</label>
+                        <div className="relative">
+                          <Input 
+                            type="number"
+                            placeholder="0.00"
+                            className="bg-neutral-700 border-neutral-600 pl-10"
+                            value={depositAmount}
+                            onChange={(e) => setDepositAmount(e.target.value)}
+                          />
+                          <div className="absolute left-3 top-3 text-neutral-400">
+                            {selectedCurrency}
+                          </div>
+                        </div>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="bg-neutral-700 rounded-lg p-3"
+                        variants={itemVariants}
+                      >
+                        <p className="text-sm text-neutral-300">
+                          <strong>Note:</strong> This is a paper trading platform. No actual cryptocurrency transactions will occur. This interface simulates the deposit experience.
+                        </p>
+                      </motion.div>
+                      
+                      <motion.div variants={itemVariants}>
+                        <Button 
+                          className="w-full" 
+                          onClick={handleDeposit}
+                          disabled={processingDeposit}
+                        >
+                          {processingDeposit ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Processing...
+                            </>
+                          ) : (
+                            <>
+                              <ArrowDown className="mr-2 h-4 w-4" />
+                              Simulate Deposit
+                            </>
+                          )}
+                        </Button>
+                      </motion.div>
+                    </motion.div>
+                  ) : depositStep === 1 ? (
+                    <motion.div 
+                      className="space-y-4"
+                      key="card-deposit-step1"
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <motion.div variants={itemVariants}>
+                        <label className="block text-sm font-medium mb-1">Select Currency</label>
+                        <select 
+                          className="w-full bg-neutral-700 border border-neutral-600 text-white rounded-md p-2"
+                          value={selectedCurrency}
+                          onChange={(e) => setSelectedCurrency(e.target.value)}
+                        >
+                          <option value="BTC">Bitcoin (BTC)</option>
+                          <option value="ETH">Ethereum (ETH)</option>
+                          <option value="USDT">Tether (USDT)</option>
+                          <option value="BNB">Binance Coin (BNB)</option>
+                        </select>
+                      </motion.div>
+                      
+                      <motion.div variants={itemVariants}>
+                        <label className="block text-sm font-medium mb-1">Amount to Deposit</label>
+                        <div className="relative">
+                          <Input 
+                            type="number"
+                            placeholder="0.00"
+                            className="bg-neutral-700 border-neutral-600 pl-10"
+                            value={depositAmount}
+                            onChange={(e) => setDepositAmount(e.target.value)}
+                          />
+                          <div className="absolute left-3 top-3 text-neutral-400">
+                            {selectedCurrency}
+                          </div>
+                        </div>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="bg-neutral-700 rounded-lg p-3"
+                        variants={itemVariants}
+                      >
+                        <p className="text-sm text-neutral-300">
+                          <strong>Note:</strong> This is a paper trading platform. No actual cryptocurrency transactions will occur. This interface simulates the credit card purchase experience.
+                        </p>
+                      </motion.div>
+                      
+                      <motion.div variants={itemVariants}>
+                        <Button 
+                          className="w-full" 
+                          onClick={handleDeposit}
+                          disabled={processingDeposit}
+                        >
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Continue to Payment
+                        </Button>
+                      </motion.div>
+                    </motion.div>
+                  ) : (
+                    <motion.div 
+                      className="space-y-4"
+                      key="card-deposit-step2"
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      <motion.div 
+                        className="bg-neutral-600 p-4 rounded-lg mb-4"
+                        variants={itemVariants}
+                      >
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="text-sm text-neutral-300">Buying</p>
+                            <p className="text-base font-medium">{depositAmount} {selectedCurrency}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-neutral-300">Total</p>
+                            <p className="text-base font-medium">
+                              ${(Number(depositAmount) * (selectedCurrency === "BTC" ? 84000 : 
+                              selectedCurrency === "ETH" ? 2000 :
+                              selectedCurrency === "USDT" ? 1 : 400)).toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                      
+                      <motion.div className="space-y-3" variants={itemVariants}>
+                        <label className="block text-sm font-medium">Card Information</label>
+                        <Input 
+                          placeholder="Card Number" 
+                          className="bg-neutral-700 border-neutral-600"
+                          value={cardDetails.cardNumber}
+                          onChange={(e) => setCardDetails({...cardDetails, cardNumber: e.target.value})}
+                        />
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input 
+                            placeholder="MM/YY" 
+                            className="bg-neutral-700 border-neutral-600"
+                            value={cardDetails.expiryDate}
+                            onChange={(e) => setCardDetails({...cardDetails, expiryDate: e.target.value})}
+                          />
+                          <Input 
+                            placeholder="CVV" 
+                            className="bg-neutral-700 border-neutral-600"
+                            value={cardDetails.cvv}
+                            onChange={(e) => setCardDetails({...cardDetails, cvv: e.target.value})}
+                          />
+                        </div>
+                        
+                        <Input 
+                          placeholder="Name on Card" 
+                          className="bg-neutral-700 border-neutral-600"
+                          value={cardDetails.name}
+                          onChange={(e) => setCardDetails({...cardDetails, name: e.target.value})}
+                        />
+                      </motion.div>
+                      
+                      <motion.div className="flex flex-col space-y-2" variants={itemVariants}>
+                        <Button 
+                          className="w-full" 
+                          onClick={handleDeposit}
+                          disabled={processingDeposit}
+                        >
+                          {processingDeposit ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Processing Payment...
+                            </>
+                          ) : (
+                            "Complete Purchase"
+                          )}
+                        </Button>
+                        
+                        <Button 
+                          variant="outline" 
+                          className="w-full" 
+                          onClick={() => setDepositStep(1)}
+                          disabled={processingDeposit}
+                        >
+                          Back
+                        </Button>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </motion.div>
               </TabsContent>
               
               <TabsContent value="withdraw" className="mt-4">
-                <div className="bg-neutral-500 rounded-lg p-4">
-                  <p className="text-sm mb-4">Withdraw crypto from your wallet.</p>
-                  
-                  <div className="space-y-4">
-                    <div>
+                <motion.div 
+                  className="bg-neutral-800 rounded-lg p-4 shadow-lg"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <motion.div 
+                    className="space-y-4"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <motion.div variants={itemVariants}>
                       <label className="block text-sm font-medium mb-1">Select Currency</label>
-                      <select className="w-full bg-neutral-400 border border-neutral-300 text-white rounded p-2">
-                        <option>Bitcoin (BTC)</option>
-                        <option>Ethereum (ETH)</option>
-                        <option>Tether (USDT)</option>
-                        <option>Binance Coin (BNB)</option>
+                      <select 
+                        className="w-full bg-neutral-700 border border-neutral-600 text-white rounded-md p-2"
+                        value={selectedCurrency}
+                        onChange={(e) => setSelectedCurrency(e.target.value)}
+                      >
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                        <option value="BNB">Binance Coin (BNB)</option>
                       </select>
-                    </div>
+                    </motion.div>
                     
-                    <div>
+                    <motion.div variants={itemVariants}>
                       <label className="block text-sm font-medium mb-1">Destination Address</label>
                       <Input 
                         placeholder="Enter destination wallet address"
-                        className="bg-neutral-400 border-neutral-300"
+                        className="bg-neutral-700 border-neutral-600 font-mono text-sm"
+                        value={destAddress}
+                        onChange={(e) => setDestAddress(e.target.value)}
                       />
-                    </div>
+                    </motion.div>
                     
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Amount</label>
-                      <Input 
-                        type="number"
-                        placeholder="0.00"
-                        className="bg-neutral-400 border-neutral-300"
-                      />
-                    </div>
+                    <motion.div variants={itemVariants}>
+                      <label className="block text-sm font-medium mb-1">Amount to Withdraw</label>
+                      <div className="relative">
+                        <Input 
+                          type="number"
+                          placeholder="0.00"
+                          className="bg-neutral-700 border-neutral-600 pl-10"
+                          value={withdrawAmount}
+                          onChange={(e) => setWithdrawAmount(e.target.value)}
+                        />
+                        <div className="absolute left-3 top-3 text-neutral-400">
+                          {selectedCurrency}
+                        </div>
+                      </div>
+                    </motion.div>
                     
-                    <div className="bg-neutral-400 rounded-lg p-3">
-                      <p className="text-sm text-neutral-200">
+                    {portfolioAssets?.find(a => a.symbol === selectedCurrency) && (
+                      <motion.div variants={itemVariants} className="flex justify-between items-center text-sm text-neutral-300 px-1">
+                        <span>Available:</span>
+                        <span className="font-medium">
+                          {portfolioAssets.find(a => a.symbol === selectedCurrency)?.amount.toFixed(8)} {selectedCurrency}
+                        </span>
+                      </motion.div>
+                    )}
+                    
+                    <motion.div 
+                      className="bg-neutral-700 rounded-lg p-3"
+                      variants={itemVariants}
+                    >
+                      <p className="text-sm text-neutral-300">
                         <strong>Note:</strong> This is a paper trading platform. No actual cryptocurrency transactions will occur. This interface simulates the withdrawal experience.
                       </p>
-                    </div>
+                    </motion.div>
                     
-                    <Button className="w-full">
-                      <ArrowUp className="mr-2 h-4 w-4" />
-                      Simulate Withdrawal
-                    </Button>
-                  </div>
-                </div>
+                    <motion.div variants={itemVariants}>
+                      <Button 
+                        className="w-full" 
+                        onClick={handleWithdrawal}
+                        disabled={processingWithdrawal}
+                      >
+                        {processingWithdrawal ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <ArrowUp className="mr-2 h-4 w-4" />
+                            Simulate Withdrawal
+                          </>
+                        )}
+                      </Button>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
               </TabsContent>
             </Tabs>
           </CardContent>
