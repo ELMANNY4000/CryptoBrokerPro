@@ -244,8 +244,11 @@ export class MemStorage implements IStorage {
   async createMiningWorker(worker: InsertMiningWorker): Promise<MiningWorker> {
     const id = this.miningWorkerId++;
     const newWorker: MiningWorker = {
-      ...worker,
       id,
+      name: worker.name,
+      userId: worker.userId,
+      hashrate: worker.hashrate,
+      isActive: worker.isActive !== undefined ? worker.isActive : true, // Default to true if not provided
       lastSeen: new Date()
     };
     this.miningWorkers.set(id, newWorker);
@@ -259,9 +262,13 @@ export class MemStorage implements IStorage {
       return undefined;
     }
     
+    // Create new worker with explicit properties to ensure type safety
     const updatedWorker: MiningWorker = {
-      ...existingWorker,
-      ...workerData,
+      id: existingWorker.id,
+      name: workerData.name !== undefined ? workerData.name : existingWorker.name,
+      userId: existingWorker.userId,
+      hashrate: workerData.hashrate !== undefined ? workerData.hashrate : existingWorker.hashrate,
+      isActive: workerData.isActive !== undefined ? workerData.isActive : existingWorker.isActive,
       lastSeen: new Date()
     };
     

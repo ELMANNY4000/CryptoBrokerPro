@@ -1,8 +1,8 @@
 import { Transaction } from "@shared/schema";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatPrice, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { formatDate, formatPrice } from "@/lib/utils";
-import { TRANSACTION_TYPES } from "@/lib/constants";
+import { ArrowUp, ArrowDown, Coins } from "lucide-react";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
@@ -16,10 +16,10 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
           <TableHead>ID</TableHead>
           <TableHead>User</TableHead>
           <TableHead>Type</TableHead>
-          <TableHead>Coin</TableHead>
-          <TableHead>Amount</TableHead>
-          <TableHead>Value (USD)</TableHead>
           <TableHead>Date</TableHead>
+          <TableHead>Asset</TableHead>
+          <TableHead>Amount</TableHead>
+          <TableHead className="text-right">Value</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -30,24 +30,29 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
             </TableCell>
           </TableRow>
         ) : (
-          transactions.map((transaction) => (
-            <TableRow key={transaction.id}>
-              <TableCell>{transaction.id}</TableCell>
-              <TableCell>{transaction.userId}</TableCell>
+          transactions.map((tx) => (
+            <TableRow key={tx.id}>
+              <TableCell>{tx.id}</TableCell>
+              <TableCell>{tx.userId}</TableCell>
               <TableCell>
-                <Badge variant={
-                  transaction.type === TRANSACTION_TYPES.BUY ? "default" :
-                  transaction.type === TRANSACTION_TYPES.SELL ? "destructive" :
-                  transaction.type === TRANSACTION_TYPES.DEPOSIT ? "outline" : 
-                  "outline"
-                }>
-                  {transaction.type}
-                </Badge>
+                {tx.type === "buy" ? (
+                  <Badge variant="outline" className="bg-green-900/20 text-green-500 border-0">
+                    <ArrowDown className="h-3 w-3 mr-1" /> Buy
+                  </Badge>
+                ) : tx.type === "sell" ? (
+                  <Badge variant="outline" className="bg-red-900/20 text-red-500 border-0">
+                    <ArrowUp className="h-3 w-3 mr-1" /> Sell
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="bg-blue-900/20 text-blue-500 border-0">
+                    <Coins className="h-3 w-3 mr-1" /> Mining
+                  </Badge>
+                )}
               </TableCell>
-              <TableCell className="uppercase">{transaction.coinId}</TableCell>
-              <TableCell>{transaction.amount.toFixed(6)}</TableCell>
-              <TableCell>{formatPrice(transaction.price * transaction.amount)}</TableCell>
-              <TableCell>{formatDate(transaction.timestamp)}</TableCell>
+              <TableCell>{formatDate(tx.timestamp)}</TableCell>
+              <TableCell>{tx.symbol}</TableCell>
+              <TableCell>{tx.amount.toFixed(6)}</TableCell>
+              <TableCell className="text-right">{formatPrice(tx.amount * tx.price)}</TableCell>
             </TableRow>
           ))
         )}

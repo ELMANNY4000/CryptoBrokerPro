@@ -1,10 +1,7 @@
-import { Transaction } from "@shared/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { formatDate, formatPrice } from "@/lib/utils";
-import { Users, CreditCard, Wallet, Coins } from "lucide-react";
-import { TRANSACTION_TYPES } from "@/lib/constants";
+import { Transaction } from "@shared/schema";
+import { formatPrice, formatNumber, formatDate } from "@/lib/utils";
+import { Users, Wallet, Clock, Coins, ArrowUp, ArrowDown } from "lucide-react";
 
 interface DashboardStatsProps {
   stats: {
@@ -19,31 +16,27 @@ interface DashboardStatsProps {
 
 export function DashboardStats({ stats }: DashboardStatsProps) {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
             <Users className="h-4 w-4 text-neutral-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalUsers}</div>
-            <p className="text-xs text-neutral-500 mt-1">
-              Registered accounts
-            </p>
+            <div className="text-2xl font-bold">{formatNumber(stats.totalUsers)}</div>
+            <p className="text-xs text-neutral-500 mt-1">Active accounts on platform</p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Transactions</CardTitle>
-            <CreditCard className="h-4 w-4 text-neutral-500" />
+            <CardTitle className="text-sm font-medium">Transactions</CardTitle>
+            <Clock className="h-4 w-4 text-neutral-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalTransactions}</div>
-            <p className="text-xs text-neutral-500 mt-1">
-              All platform transactions
-            </p>
+            <div className="text-2xl font-bold">{formatNumber(stats.totalTransactions)}</div>
+            <p className="text-xs text-neutral-500 mt-1">Total transaction volume</p>
           </CardContent>
         </Card>
         
@@ -53,10 +46,8 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
             <Wallet className="h-4 w-4 text-neutral-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalAssets}</div>
-            <p className="text-xs text-neutral-500 mt-1">
-              User portfolio assets
-            </p>
+            <div className="text-2xl font-bold">{formatNumber(stats.totalAssets)}</div>
+            <p className="text-xs text-neutral-500 mt-1">Portfolio assets tracked</p>
           </CardContent>
         </Card>
         
@@ -66,62 +57,63 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
             <Coins className="h-4 w-4 text-neutral-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalWorkers}</div>
-            <p className="text-xs text-neutral-500 mt-1">
-              Active mining operations
-            </p>
+            <div className="text-2xl font-bold">{formatNumber(stats.totalWorkers)}</div>
+            <p className="text-xs text-neutral-500 mt-1">{formatNumber(stats.totalRewards)} rewards paid</p>
           </CardContent>
         </Card>
       </div>
       
-      <Card>
+      <Card className="mb-8">
         <CardHeader>
           <CardTitle>Recent Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Coin</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Value (USD)</TableHead>
-                <TableHead>Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {stats.recentTransactions.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-4">
-                    No recent transactions
-                  </TableCell>
-                </TableRow>
-              ) : (
-                stats.recentTransactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell>{transaction.userId}</TableCell>
-                    <TableCell>
-                      <Badge variant={
-                        transaction.type === TRANSACTION_TYPES.BUY ? "default" :
-                        transaction.type === TRANSACTION_TYPES.SELL ? "destructive" :
-                        transaction.type === TRANSACTION_TYPES.DEPOSIT ? "outline" : 
-                        "outline"
-                      }>
-                        {transaction.type}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="uppercase">{transaction.coinId}</TableCell>
-                    <TableCell>{transaction.amount.toFixed(6)}</TableCell>
-                    <TableCell>{formatPrice(transaction.price * transaction.amount)}</TableCell>
-                    <TableCell>{formatDate(transaction.timestamp)}</TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+          <div className="space-y-4">
+            {stats.recentTransactions.length === 0 ? (
+              <p className="text-sm text-neutral-500">No recent transactions</p>
+            ) : (
+              stats.recentTransactions.map((tx) => (
+                <div key={tx.id} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    {tx.type === "buy" ? (
+                      <div className="w-8 h-8 rounded-full bg-green-900/20 flex items-center justify-center text-green-500">
+                        <ArrowDown className="h-4 w-4" />
+                      </div>
+                    ) : tx.type === "sell" ? (
+                      <div className="w-8 h-8 rounded-full bg-red-900/20 flex items-center justify-center text-red-500">
+                        <ArrowUp className="h-4 w-4" />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-blue-900/20 flex items-center justify-center text-blue-500">
+                        <Coins className="h-4 w-4" />
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-medium">
+                        {tx.type === "buy" 
+                          ? `Bought ${tx.symbol}`
+                          : tx.type === "sell"
+                          ? `Sold ${tx.symbol}`
+                          : `Mining reward ${tx.symbol}`
+                        }
+                      </p>
+                      <p className="text-xs text-neutral-500">{formatDate(tx.timestamp)}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-medium">
+                      {tx.type === "buy" ? "-" : "+"}{formatPrice(tx.amount * tx.price)}
+                    </p>
+                    <p className="text-xs text-neutral-500">
+                      {tx.amount.toFixed(6)} {tx.symbol}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </CardContent>
       </Card>
-    </div>
+    </>
   );
 }
