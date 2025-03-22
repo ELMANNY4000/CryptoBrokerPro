@@ -38,7 +38,7 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
                 <Badge variant={
                   transaction.type === TRANSACTION_TYPES.BUY ? "default" :
                   transaction.type === TRANSACTION_TYPES.SELL ? "destructive" :
-                  transaction.type === TRANSACTION_TYPES.DEPOSIT ? "success" : 
+                  transaction.type === TRANSACTION_TYPES.DEPOSIT ? "outline" : 
                   "outline"
                 }>
                   {transaction.type}
@@ -46,8 +46,8 @@ export function TransactionsTable({ transactions }: TransactionsTableProps) {
               </TableCell>
               <TableCell className="uppercase">{transaction.coinId}</TableCell>
               <TableCell>{transaction.amount.toFixed(6)}</TableCell>
-              <TableCell>{formatPrice(transaction.valueUsd)}</TableCell>
-              <TableCell>{formatDate(transaction.createdAt)}</TableCell>
+              <TableCell>{formatPrice(transaction.price * transaction.amount)}</TableCell>
+              <TableCell>{formatDate(transaction.timestamp)}</TableCell>
             </TableRow>
           ))
         )}

@@ -14,9 +14,33 @@ import Portfolio from "@/pages/Portfolio";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/not-found";
 
+// Admin Pages
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+
 function Router() {
   const [location] = useLocation();
   
+  // Check if we're on an admin route
+  const isAdminRoute = location.startsWith("/admin");
+  
+  // For admin routes, render without the sidebar and header
+  if (isAdminRoute) {
+    return (
+      <div className="bg-background text-foreground">
+        <main>
+          <Switch>
+            <Route path="/admin/login" component={AdminLogin} />
+            <Route path="/admin/dashboard" component={AdminDashboard} />
+            <Route component={NotFound} />
+          </Switch>
+        </main>
+        <Toaster />
+      </div>
+    );
+  }
+  
+  // For non-admin routes, render with the sidebar and header
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
       <Sidebar currentPath={location} />

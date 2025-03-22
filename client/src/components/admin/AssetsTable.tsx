@@ -15,14 +15,13 @@ export function AssetsTable({ assets }: AssetsTableProps) {
           <TableHead>User</TableHead>
           <TableHead>Coin</TableHead>
           <TableHead>Amount</TableHead>
-          <TableHead>Average Buy Price</TableHead>
-          <TableHead>Total Value (USD)</TableHead>
+          <TableHead>Updated</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {assets.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={5} className="text-center py-4">
+            <TableCell colSpan={4} className="text-center py-4">
               No assets found
             </TableCell>
           </TableRow>
@@ -37,8 +36,7 @@ export function AssetsTable({ assets }: AssetsTableProps) {
                 </div>
               </TableCell>
               <TableCell>{asset.amount.toFixed(6)}</TableCell>
-              <TableCell>{formatPrice(asset.avgBuyPrice)}</TableCell>
-              <TableCell>{formatPrice(asset.amount * asset.avgBuyPrice)}</TableCell>
+              <TableCell>{new Date(asset.updatedAt).toLocaleDateString()}</TableCell>
             </TableRow>
           ))
         )}
