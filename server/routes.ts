@@ -345,6 +345,200 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ADMIN ROUTES
+  
+  // Admin Authentication
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password required" });
+      }
+      
+      const user = await storage.getUserByUsername(username);
+      
+      if (!user || user.password !== password || user.role !== "admin") {
+        return res.status(401).json({ message: "Invalid credentials or not an admin" });
+      }
+      
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      
+      // In a real app, you would create a JWT token here
+      res.json({ user: userWithoutPassword, authenticated: true });
+    } catch (error) {
+      console.error("Error during admin login:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+  // Admin authentication middleware
+  const requireAdmin = async (req: any, res: any, next: any) => {
+    try {
+      // For demo purposes, we'll use a simple admin check
+      // In a real app, you'd verify a JWT token
+      const authHeader = req.headers.authorization;
+      
+      if (!authHeader || !authHeader.startsWith('Basic ')) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
+      const base64Credentials = authHeader.split(' ')[1];
+      const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+      const [username, password] = credentials.split(':');
+      
+      const user = await storage.getUserByUsername(username);
+      
+      if (!user || user.password !== password || user.role !== "admin") {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      
+      req.adminUser = user;
+      next();
+    } catch (error) {
+      console.error("Admin auth error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  };
+  
+  // Get all users
+  app.get("/api/admin/users", requireAdmin, async (_req, res) => {
+    try {
+      const users = await storage.getAllUsers();
+      // Remove passwords before sending
+      const usersWithoutPasswords = users.map(user => {
+        const { password, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+      });
+      
+      res.json(usersWithoutPasswords);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+  // Get all transactions
+  app.get("/api/admin/transactions", requireAdmin, async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const transactions = await storage.getAllTransactions(limit);
+      
+      // Enrich transactions with user data
+      const enrichedTransactions = await Promise.all(
+        transactions.map(async (tx) => {
+          const user = await storage.getUser(tx.userId);
+          return {
+            ...tx,
+            username: user ? user.username : 'Unknown User'
+          };
+        })
+      );
+      
+      res.json(enrichedTransactions);
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+  // Get all portfolio assets
+  app.get("/api/admin/portfolio", requireAdmin, async (_req, res) => {
+    try {
+      const assets = await storage.getAllPortfolioAssets();
+      
+      // Enrich assets with user data
+      const enrichedAssets = await Promise.all(
+        assets.map(async (asset) => {
+          const user = await storage.getUser(asset.userId);
+          return {
+            ...asset,
+            username: user ? user.username : 'Unknown User'
+          };
+        })
+      );
+      
+      res.json(enrichedAssets);
+    } catch (error) {
+      console.error("Error fetching assets:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+  // Get all mining workers
+  app.get("/api/admin/mining/workers", requireAdmin, async (_req, res) => {
+    try {
+      const workers = await storage.getAllMiningWorkers();
+      
+      // Enrich workers with user data
+      const enrichedWorkers = await Promise.all(
+        workers.map(async (worker) => {
+          const user = await storage.getUser(worker.userId);
+          return {
+            ...worker,
+            username: user ? user.username : 'Unknown User'
+          };
+        })
+      );
+      
+      res.json(enrichedWorkers);
+    } catch (error) {
+      console.error("Error fetching workers:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+  // Get all mining rewards
+  app.get("/api/admin/mining/rewards", requireAdmin, async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+      const rewards = await storage.getAllMiningRewards(limit);
+      
+      // Enrich rewards with user data
+      const enrichedRewards = await Promise.all(
+        rewards.map(async (reward) => {
+          const user = await storage.getUser(reward.userId);
+          return {
+            ...reward,
+            username: user ? user.username : 'Unknown User'
+          };
+        })
+      );
+      
+      res.json(enrichedRewards);
+    } catch (error) {
+      console.error("Error fetching rewards:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+  // Update user role
+  app.patch("/api/admin/users/:userId", requireAdmin, async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { role } = req.body;
+      
+      if (!role || !["user", "admin"].includes(role)) {
+        return res.status(400).json({ message: "Invalid role specified" });
+      }
+      
+      const updatedUser = await storage.updateUserRole(parseInt(userId), role);
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Remove password before sending
+      const { password, ...userWithoutPassword } = updatedUser;
+      
+      res.json(userWithoutPassword);
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   // Create HTTP server
   const httpServer = createServer(app);
   return httpServer;
