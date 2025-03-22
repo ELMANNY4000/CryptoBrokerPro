@@ -9,6 +9,16 @@ import { Label } from "@/components/ui/label";
 import { useLocation } from "wouter";
 import { Lock, User } from "lucide-react";
 
+interface AdminLoginResponse {
+  authenticated: boolean;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    role: string;
+  };
+}
+
 const AdminLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +27,7 @@ const AdminLogin = () => {
   
   const loginMutation = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
-      return apiRequest("POST", "/api/admin/login", credentials);
+      return apiRequest<AdminLoginResponse>("POST", "/api/admin/login", credentials);
     },
     onSuccess: (data) => {
       if (data.authenticated) {

@@ -41,9 +41,12 @@ const AdminDashboard = () => {
   const { data: users, isLoading: isLoadingUsers } = useQuery({
     queryKey: ["/api/admin/users"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/users", {
-        headers: requestHeaders,
-      });
+      const headers: Record<string, string> = {};
+      if (adminToken) {
+        headers["Authorization"] = adminToken;
+      }
+      
+      const response = await fetch("/api/admin/users", { headers });
       
       if (!response.ok) {
         if (response.status === 401) {
@@ -67,9 +70,12 @@ const AdminDashboard = () => {
   const { data: transactions, isLoading: isLoadingTransactions } = useQuery({
     queryKey: ["/api/admin/transactions"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/transactions", {
-        headers: requestHeaders,
-      });
+      const headers: Record<string, string> = {};
+      if (adminToken) {
+        headers["Authorization"] = adminToken;
+      }
+      
+      const response = await fetch("/api/admin/transactions", { headers });
       
       if (!response.ok) {
         throw new Error("Failed to fetch transactions");
@@ -83,9 +89,12 @@ const AdminDashboard = () => {
   const { data: assets, isLoading: isLoadingAssets } = useQuery({
     queryKey: ["/api/admin/portfolio"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/portfolio", {
-        headers: requestHeaders,
-      });
+      const headers: Record<string, string> = {};
+      if (adminToken) {
+        headers["Authorization"] = adminToken;
+      }
+      
+      const response = await fetch("/api/admin/portfolio", { headers });
       
       if (!response.ok) {
         throw new Error("Failed to fetch portfolio assets");
@@ -99,9 +108,12 @@ const AdminDashboard = () => {
   const { data: workers, isLoading: isLoadingWorkers } = useQuery({
     queryKey: ["/api/admin/mining/workers"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/mining/workers", {
-        headers: requestHeaders,
-      });
+      const headers: Record<string, string> = {};
+      if (adminToken) {
+        headers["Authorization"] = adminToken;
+      }
+      
+      const response = await fetch("/api/admin/mining/workers", { headers });
       
       if (!response.ok) {
         throw new Error("Failed to fetch mining workers");
@@ -115,9 +127,12 @@ const AdminDashboard = () => {
   const { data: rewards, isLoading: isLoadingRewards } = useQuery({
     queryKey: ["/api/admin/mining/rewards"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/mining/rewards", {
-        headers: requestHeaders,
-      });
+      const headers: Record<string, string> = {};
+      if (adminToken) {
+        headers["Authorization"] = adminToken;
+      }
+      
+      const response = await fetch("/api/admin/mining/rewards", { headers });
       
       if (!response.ok) {
         throw new Error("Failed to fetch mining rewards");

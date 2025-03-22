@@ -2,7 +2,7 @@ import { MiningWorker, MiningReward } from "@shared/schema";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { formatDate, formatPrice } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 interface MiningTableProps {
   workers: MiningWorker[];
@@ -26,14 +26,13 @@ export function MiningTable({ workers, rewards }: MiningTableProps) {
               <TableHead>Name</TableHead>
               <TableHead>Hashrate</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Efficiency</TableHead>
-              <TableHead>Last Activity</TableHead>
+              <TableHead>Last Seen</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {workers.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-4">
+                <TableCell colSpan={6} className="text-center py-4">
                   No mining workers found
                 </TableCell>
               </TableRow>
@@ -45,12 +44,11 @@ export function MiningTable({ workers, rewards }: MiningTableProps) {
                   <TableCell>{worker.name}</TableCell>
                   <TableCell>{worker.hashrate} MH/s</TableCell>
                   <TableCell>
-                    <Badge variant={worker.active ? "success" : "destructive"}>
-                      {worker.active ? "Active" : "Inactive"}
+                    <Badge variant={worker.isActive ? "default" : "destructive"}>
+                      {worker.isActive ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
-                  <TableCell>{worker.efficiency}%</TableCell>
-                  <TableCell>{formatDate(worker.lastActivity)}</TableCell>
+                  <TableCell>{formatDate(worker.lastSeen)}</TableCell>
                 </TableRow>
               ))
             )}
@@ -65,14 +63,13 @@ export function MiningTable({ workers, rewards }: MiningTableProps) {
               <TableHead>ID</TableHead>
               <TableHead>User</TableHead>
               <TableHead>Amount (BTC)</TableHead>
-              <TableHead>Value (USD)</TableHead>
               <TableHead>Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {rewards.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-4">
+                <TableCell colSpan={4} className="text-center py-4">
                   No mining rewards found
                 </TableCell>
               </TableRow>
@@ -82,7 +79,6 @@ export function MiningTable({ workers, rewards }: MiningTableProps) {
                   <TableCell>{reward.id}</TableCell>
                   <TableCell>{reward.userId}</TableCell>
                   <TableCell>{reward.amount.toFixed(8)}</TableCell>
-                  <TableCell>{formatPrice(reward.valueUsd)}</TableCell>
                   <TableCell>{formatDate(reward.timestamp)}</TableCell>
                 </TableRow>
               ))

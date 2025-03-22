@@ -23,12 +23,17 @@ export function UsersTable({ users, requestHeaders }: UsersTableProps) {
   
   const updateRoleMutation = useMutation({
     mutationFn: async ({ userId, role }: { userId: number; role: string }) => {
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      
+      if (requestHeaders.Authorization) {
+        headers["Authorization"] = requestHeaders.Authorization;
+      }
+      
       const response = await fetch(`/api/admin/users/${userId}/role`, {
         method: "PATCH",
-        headers: {
-          ...requestHeaders,
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify({ role }),
       });
       
