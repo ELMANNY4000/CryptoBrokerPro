@@ -1,9 +1,20 @@
 import { useState } from "react";
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation, useRoute } from "wouter";
 
-const Header = () => {
+interface HeaderProps {
+  title?: string;
+}
+
+const Header = ({ title = "Dashboard Overview" }: HeaderProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [, navigate] = useLocation();
+  const [isRootPath] = useRoute("/");
+  
+  const goBack = () => {
+    window.history.back();
+  };
   
   const toggleSidebar = () => {
     const sidebar = document.querySelector('div[class^="fixed md:relative w-64"]');
@@ -23,7 +34,19 @@ const Header = () => {
         >
           <Menu className="h-6 w-6" />
         </button>
-        <h2 className="text-lg font-semibold">Dashboard Overview</h2>
+        
+        {!isRootPath && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mr-2 text-neutral-200 hover:text-white"
+            onClick={goBack}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+        )}
+        
+        <h2 className="text-lg font-semibold">{title}</h2>
       </div>
       
       <div className="flex items-center space-x-4">
@@ -33,6 +56,7 @@ const Header = () => {
         <Button
           variant="outline"
           className="px-4 py-1.5 border border-primary text-primary rounded-md hover:bg-primary hover:text-white transition-colors"
+          onClick={() => navigate("/wallet")}
         >
           Deposit
         </Button>

@@ -169,6 +169,46 @@ const Wallet = () => {
     }
   });
   
+  // Reset portfolio balances to zero
+  const resetPortfolioMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch('/api/portfolio/reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to reset portfolio');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      // Invalidate portfolio data to refresh UI
+      queryClient.invalidateQueries({ queryKey: ["/api/portfolio"] });
+      
+      toast({
+        title: "Portfolio Reset",
+        description: "Your portfolio balances have been reset to zero",
+        variant: "default",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Reset Failed",
+        description: error.message || "An error occurred while resetting your portfolio",
+        variant: "destructive",
+      });
+    }
+  });
+  
+  // Handler for portfolio reset button
+  const resetPortfolio = () => {
+    resetPortfolioMutation.mutate();
+  };
+  
   const handleDeposit = () => {
     if (!depositAmount || isNaN(Number(depositAmount)) || Number(depositAmount) <= 0) {
       toast({

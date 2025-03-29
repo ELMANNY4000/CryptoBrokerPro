@@ -40,13 +40,33 @@ function Router() {
     );
   }
   
+  // Get the page title based on current location
+  const getPageTitle = () => {
+    switch (true) {
+      case location === "/":
+        return "Dashboard Overview";
+      case location === "/trading":
+        return "Trading Platform";
+      case location === "/mining":
+        return "Mining Dashboard";
+      case location === "/wallet":
+        return "Wallet & Deposits";
+      case location === "/portfolio":
+        return "Portfolio Management";
+      case location === "/settings":
+        return "Account Settings";
+      default:
+        return "Trading Desk";
+    }
+  };
+
   // For non-admin routes, render with the sidebar and header
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
       <Sidebar currentPath={location} />
       
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <Header />
+        <Header title={getPageTitle()} />
         
         <main className="flex-1 overflow-y-auto bg-background p-4">
           <Switch>
