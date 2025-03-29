@@ -12,10 +12,23 @@ import {
 
 interface SidebarProps {
   currentPath: string;
+  isOpen?: boolean;
+  setIsOpen?: (isOpen: boolean) => void;
 }
 
-const Sidebar = ({ currentPath }: SidebarProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Sidebar = ({ currentPath, isOpen = false, setIsOpen }: SidebarProps) => {
+  // Internal state only used if external control is not provided
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  
+  // Use external control if provided, otherwise use internal state
+  const isVisible = setIsOpen ? isOpen : internalIsOpen;
+  const toggleOpen = (value: boolean) => {
+    if (setIsOpen) {
+      setIsOpen(value);
+    } else {
+      setInternalIsOpen(value);
+    }
+  };
   
   const navItems = [
     { path: "/", label: "Dashboard", icon: <BarChart2 className="h-5 w-5 mr-3" /> },
@@ -26,12 +39,12 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
     { path: "/settings", label: "Settings", icon: <Settings className="h-5 w-5 mr-3" /> },
   ];
   
-  const closeSidebar = () => setIsOpen(false);
+  const closeSidebar = () => toggleOpen(false);
   
   return (
     <div 
       className={`fixed md:relative w-64 h-screen bg-secondary shadow-lg z-30 
-        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+        ${isVisible ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
         transition-transform duration-300 ease-in-out`}
     >
       <div className="flex flex-col h-full">

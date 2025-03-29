@@ -1,4 +1,5 @@
 import { Switch, Route, useLocation } from "wouter";
+import { useState } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
@@ -60,13 +61,24 @@ function Router() {
     }
   };
 
+  // Sidebar state for mobile navigation
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   // For non-admin routes, render with the sidebar and header
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground">
-      <Sidebar currentPath={location} />
+      <Sidebar 
+        currentPath={location} 
+        isOpen={isSidebarOpen}
+        setIsOpen={setSidebarOpen}
+      />
       
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <Header title={getPageTitle()} />
+        <Header 
+          title={getPageTitle()} 
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setSidebarOpen}
+        />
         
         <main className="flex-1 overflow-y-auto bg-background p-4">
           <Switch>

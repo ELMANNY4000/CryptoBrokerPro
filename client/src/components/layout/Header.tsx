@@ -5,10 +5,15 @@ import { useLocation, useRoute } from "wouter";
 
 interface HeaderProps {
   title?: string;
+  isSidebarOpen?: boolean;
+  setIsSidebarOpen?: (isOpen: boolean) => void;
 }
 
-const Header = ({ title = "Dashboard Overview" }: HeaderProps) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const Header = ({ 
+  title = "Dashboard Overview",
+  isSidebarOpen = false,
+  setIsSidebarOpen
+}: HeaderProps) => {
   const [, navigate] = useLocation();
   const [isRootPath] = useRoute("/");
   
@@ -17,11 +22,8 @@ const Header = ({ title = "Dashboard Overview" }: HeaderProps) => {
   };
   
   const toggleSidebar = () => {
-    const sidebar = document.querySelector('div[class^="fixed md:relative w-64"]');
-    if (sidebar) {
+    if (setIsSidebarOpen) {
       setIsSidebarOpen(!isSidebarOpen);
-      sidebar.classList.toggle('-translate-x-full');
-      sidebar.classList.toggle('translate-x-0');
     }
   };
   
