@@ -36,6 +36,9 @@ const Wallet = () => {
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [destAddress, setDestAddress] = useState("");
+  const [walletAddress, setWalletAddress] = useState(
+    "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+  );
   const [depositMethod, setDepositMethod] = useState<"crypto" | "card">("crypto");
   const [depositStep, setDepositStep] = useState(1);
   const [cardDetails, setCardDetails] = useState({
@@ -49,6 +52,11 @@ const Wallet = () => {
   
   const { data: user } = useQuery<User>({
     queryKey: ["/api/user"],
+    onSuccess: (data) => {
+      if (data?.walletAddress) {
+        setWalletAddress(data.walletAddress);
+      }
+    }
   });
   
   const { data: transactions } = useQuery<Transaction[]>({
@@ -291,8 +299,8 @@ const Wallet = () => {
   };
   
   const copyWalletAddress = () => {
-    if (user?.walletAddress) {
-      navigator.clipboard.writeText(user.walletAddress);
+    if (walletAddress) {
+      navigator.clipboard.writeText(walletAddress);
       toast({
         title: "Address Copied",
         description: "Wallet address copied to clipboard",
@@ -337,22 +345,30 @@ const Wallet = () => {
             <div className="flex flex-col space-y-4">
               <div>
                 <p className="text-sm text-neutral-300 mb-1">Wallet Address</p>
-                <div className="bg-neutral-500 rounded p-3 flex justify-between items-center">
-                  <span className="text-sm font-mono truncate">
-                    {user?.walletAddress || "Loading..."}
-                  </span>
-                  <div className="flex">
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={copyWalletAddress}
-                    >
-                      <Copy className="h-4 w-4 text-primary" />
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <ExternalLink className="h-4 w-4 text-primary" />
-                    </Button>
+                <div className="bg-neutral-500 rounded p-3 flex flex-col space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-mono truncate">
+                      {walletAddress}
+                    </span>
+                    <div className="flex">
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={copyWalletAddress}
+                      >
+                        <Copy className="h-4 w-4 text-primary" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <ExternalLink className="h-4 w-4 text-primary" />
+                      </Button>
+                    </div>
                   </div>
+                  <Input
+                    className="bg-neutral-700 border-neutral-600 font-mono text-sm"
+                    value={walletAddress}
+                    onChange={(e) => setWalletAddress(e.target.value)}
+                    placeholder="Edit your wallet address"
+                  />
                 </div>
               </div>
               
@@ -360,18 +376,11 @@ const Wallet = () => {
                 <div>
                   <p className="text-sm text-neutral-300 mb-1">Available Balance</p>
                   <div className="bg-neutral-500 rounded p-3">
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center">
                       <div>
-                        <p className="text-lg font-medium">${totalPortfolioValue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}</p>
+                        <p className="text-lg font-medium">$0.00</p>
                         <p className="text-xs text-neutral-300">Total portfolio value</p>
                       </div>
-                      <Button 
-                        variant="destructive" 
-                        size="sm"
-                        onClick={resetPortfolio}
-                      >
-                        Reset to Zero
-                      </Button>
                     </div>
                   </div>
                 </div>
@@ -448,14 +457,18 @@ const Wallet = () => {
                       
                       <motion.div variants={itemVariants}>
                         <label className="block text-sm font-medium mb-1">Your Deposit Address</label>
-                        <div className="bg-neutral-700 border border-neutral-600 rounded-md p-3 flex justify-between items-center">
-                          <span className="text-sm font-mono truncate">
-                            {user?.walletAddress || "Loading..."}
-                          </span>
+                        <div className="flex">
+                          <Input
+                            className="bg-neutral-700 border-neutral-600 font-mono text-sm flex-grow"
+                            value={walletAddress}
+                            onChange={(e) => setWalletAddress(e.target.value)}
+                            placeholder="Enter or paste wallet address here"
+                          />
                           <Button 
                             variant="ghost" 
                             size="sm"
                             onClick={copyWalletAddress}
+                            className="ml-2"
                           >
                             <Copy className="h-4 w-4" />
                           </Button>
