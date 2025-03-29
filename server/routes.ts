@@ -140,6 +140,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(400).json({ message: "Invalid portfolio data" });
     }
   });
+  
+  // Reset portfolio balances to zero
+  app.post("/api/portfolio/reset", async (req, res) => {
+    try {
+      const user = await storage.getUserByUsername("demo");
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const assets = await storage.getPortfolioAssets(user.id);
+      
+      // Reset each asset's amount to zero
+      for (const asset of assets) {
+        await storage.createOrUpdatePortfolioAsset({
+          userId: asset.userId,
+          coinId: asset.coinId,
+          symbol: asset.symbol,
+          name: asset.name,
+          amount: 0
+        });
+      }
+      
+      const updatedAssets = await storage.getPortfolioAssets(user.id);
+      res.json(updatedAssets);
+    } catch (error) {
+      console.error("Error resetting portfolio:", error);
+      res.status(500).json({ message: "Failed to reset portfolio" });
+    }
+  });
 
   // Transaction Routes
   

@@ -320,8 +320,19 @@ const Wallet = () => {
                 <div>
                   <p className="text-sm text-neutral-300 mb-1">Available Balance</p>
                   <div className="bg-neutral-500 rounded p-3">
-                    <p className="text-lg font-medium">${totalPortfolioValue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}</p>
-                    <p className="text-xs text-neutral-300">Total portfolio value</p>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-lg font-medium">${totalPortfolioValue?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || "0.00"}</p>
+                        <p className="text-xs text-neutral-300">Total portfolio value</p>
+                      </div>
+                      <Button 
+                        variant="destructive" 
+                        size="sm"
+                        onClick={resetPortfolio}
+                      >
+                        Reset to Zero
+                      </Button>
+                    </div>
                   </div>
                 </div>
                 
