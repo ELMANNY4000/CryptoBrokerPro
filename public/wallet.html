@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Wallet</title>
+    <link rel="stylesheet" href="wallet.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">Trading Desk</div>
+        <ul class="navbar-menu">
+            <li><a href="#" class="nav-item">Dashboard</a></li>
+            <li><a href="#" class="nav-item active">Wallet</a></li>
+            <li><a href="#" class="nav-item">Trading</a></li>
+            <li><a href="#" class="nav-item">Mining</a></li>
+            <li><a href="#" class="nav-item">Portfolio</a></li>
+            <li><a href="#" class="nav-item">Settings</a></li>
+        </ul>
+        <div class="navbar-user">
+            <span class="user-name">Demo User</span>
+            <div class="user-avatar">D</div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Wallet</h1>
+    </header>
+
+    <main class="container">
+        <div class="card-grid">
+            <!-- Wallet Details Card -->
+            <div class="card primary-card">
+                <div class="card-header">
+                    <h2 class="card-title">Wallet Details</h2>
+                    <div class="card-description">Your crypto wallet information</div>
+                </div>
+                <div class="card-content">
+                    <div class="wallet-info">
+                        <div class="wallet-address-section">
+                            <label>Wallet Address</label>
+                            <div class="wallet-address-container">
+                                <div class="wallet-address-display">
+                                    <span id="displayWalletAddress" class="address-text">0x742d35Cc6634C0532925a3b844Bc454e4438f44e</span>
+                                    <div class="address-actions">
+                                        <button id="copyAddressBtn" class="btn btn-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                        </button>
+                                        <button class="btn btn-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input id="walletAddressInput" type="text" class="input-field" value="0x742d35Cc6634C0532925a3b844Bc454e4438f44e" placeholder="Edit your wallet address">
+                            </div>
+                        </div>
+
+                        <div class="wallet-stats">
+                            <div class="stat-card">
+                                <label>Available Balance</label>
+                                <div class="stat-value">$0.00</div>
+                                <div class="stat-description">Total portfolio value</div>
+                            </div>
+                            <div class="stat-card">
+                                <label>Account Status</label>
+                                <div class="stat-value">Active</div>
+                                <div class="stat-description">Paper trading enabled</div>
+                            </div>
+                        </div>
+
+                        <div class="wallet-actions">
+                            <div class="tabs">
+                                <div class="tab-list">
+                                    <button class="tab-button active" data-tab="deposit">Deposit</button>
+                                    <button class="tab-button" data-tab="withdraw">Withdraw</button>
+                                </div>
+
+                                <div class="tab-content active" id="deposit-tab">
+                                    <div class="deposit-methods">
+                                        <button class="method-button active" data-method="crypto">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7 7 7-7"/></svg>
+                                            Crypto
+                                        </button>
+                                        <button class="method-button" data-method="card">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                                            Card
+                                        </button>
+                                    </div>
+
+                                    <div class="deposit-form crypto-deposit active">
+                                        <div class="form-group">
+                                            <label>Select Currency</label>
+                                            <select class="select-field" id="cryptoCurrency">
+                                                <option value="BTC">Bitcoin (BTC)</option>
+                                                <option value="ETH">Ethereum (ETH)</option>
+                                                <option value="USDT">Tether (USDT)</option>
+                                                <option value="BNB">Binance Coin (BNB)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Your Deposit Address</label>
+                                            <div class="input-with-icon">
+                                                <input type="text" class="input-field deposit-address" value="0x742d35Cc6634C0532925a3b844Bc454e4438f44e" placeholder="Enter or paste wallet address here">
+                                                <button class="btn btn-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Amount to Deposit</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix" id="cryptoPrefix">BTC</span>
+                                                <input type="number" class="input-field" id="cryptoAmount" placeholder="0.00">
+                                            </div>
+                                        </div>
+
+                                        <div class="note-box">
+                                            <strong>Note:</strong> This is a paper trading platform. No actual cryptocurrency transactions will occur. This interface simulates the deposit experience.
+                                        </div>
+
+                                        <button class="btn btn-primary btn-full" id="cryptoDepositBtn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7 7 7-7"/></svg>
+                                            Simulate Deposit
+                                        </button>
+                                    </div>
+
+                                    <div class="deposit-form card-deposit">
+                                        <div class="form-group">
+                                            <label>Select Currency</label>
+                                            <select class="select-field" id="cardCurrency">
+                                                <option value="BTC">Bitcoin (BTC)</option>
+                                                <option value="ETH">Ethereum (ETH)</option>
+                                                <option value="USDT">Tether (USDT)</option>
+                                                <option value="BNB">Binance Coin (BNB)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Amount to Deposit</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix" id="cardPrefix">BTC</span>
+                                                <input type="number" class="input-field" id="cardAmount" placeholder="0.00">
+                                            </div>
+                                        </div>
+
+                                        <div class="note-box">
+                                            <strong>Note:</strong> This is a paper trading platform. No actual cryptocurrency transactions will occur. This interface simulates the credit card purchase experience.
+                                        </div>
+
+                                        <button class="btn btn-primary btn-full" id="continuePaymentBtn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                                            Continue to Payment
+                                        </button>
+                                    </div>
+
+                                    <div class="deposit-form card-payment">
+                                        <div class="payment-summary">
+                                            <div>
+                                                <div class="summary-label">Buying</div>
+                                                <div class="summary-value" id="buyingAmount">0.05 BTC</div>
+                                            </div>
+                                            <div>
+                                                <div class="summary-label">Total</div>
+                                                <div class="summary-value" id="totalAmount">$4,200.00</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Card Information</label>
+                                            <input type="text" class="input-field" placeholder="Card Number">
+                                            
+                                            <div class="card-details">
+                                                <input type="text" class="input-field" placeholder="MM/YY">
+                                                <input type="text" class="input-field" placeholder="CVV">
+                                            </div>
+                                            
+                                            <input type="text" class="input-field" placeholder="Name on Card">
+                                        </div>
+
+                                        <div class="form-actions">
+                                            <button class="btn btn-primary btn-full" id="completePaymentBtn">
+                                                Complete Purchase
+                                            </button>
+                                            <button class="btn btn-outline btn-full" id="backToCardFormBtn">
+                                                Back
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-content" id="withdraw-tab">
+                                    <div class="withdraw-form">
+                                        <div class="form-group">
+                                            <label>Select Currency</label>
+                                            <select class="select-field" id="withdrawCurrency">
+                                                <option value="BTC">Bitcoin (BTC)</option>
+                                                <option value="ETH">Ethereum (ETH)</option>
+                                                <option value="USDT">Tether (USDT)</option>
+                                                <option value="BNB">Binance Coin (BNB)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Destination Address</label>
+                                            <input type="text" class="input-field" id="destinationAddress" placeholder="Enter destination wallet address">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Amount to Withdraw</label>
+                                            <div class="input-with-prefix">
+                                                <span class="input-prefix" id="withdrawPrefix">BTC</span>
+                                                <input type="number" class="input-field" id="withdrawAmount" placeholder="0.00">
+                                            </div>
+                                        </div>
+
+                                        <div class="available-info">
+                                            <span>Available:</span>
+                                            <span id="availableAmount">0.00000000 BTC</span>
+                                        </div>
+
+                                        <div class="note-box">
+                                            <strong>Note:</strong> This is a paper trading platform. No actual cryptocurrency transactions will occur. This interface simulates the withdrawal experience.
+                                        </div>
+
+                                        <button class="btn btn-primary btn-full" id="withdrawBtn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12l7-7 7 7"/></svg>
+                                            Simulate Withdrawal
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Card -->
+            <div class="card secondary-card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Transactions</h2>
+                    <div class="card-description">Your latest wallet activity</div>
+                </div>
+                <div class="card-content">
+                    <div class="transactions-list" id="transactionsList">
+                        <!-- Transactions will be loaded dynamically -->
+                        <div class="empty-transactions">
+                            <div class="empty-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+                            </div>
+                            <div class="empty-text">No transactions yet</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="wallet.js"></script>
+</body>
+</html>
