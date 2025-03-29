@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mining - Trading Desk</title>
+    <link rel="stylesheet" href="mining.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">Trading Desk</div>
+        <ul class="navbar-menu">
+            <li><a href="dashboard.html" class="nav-item">Dashboard</a></li>
+            <li><a href="wallet.html" class="nav-item">Wallet</a></li>
+            <li><a href="trading.html" class="nav-item">Trading</a></li>
+            <li><a href="#" class="nav-item active">Mining</a></li>
+            <li><a href="#" class="nav-item">Portfolio</a></li>
+            <li><a href="#" class="nav-item">Settings</a></li>
+        </ul>
+        <div class="navbar-user">
+            <span class="user-name">Demo User</span>
+            <div class="user-avatar">D</div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Mining Dashboard</h1>
+    </header>
+
+    <main class="container">
+        <div class="mining-overview">
+            <div class="stats-card">
+                <div class="stat">
+                    <div class="stat-title">Current BTC Price</div>
+                    <div class="stat-value" id="bitcoinPrice">$0.00</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Active Workers</div>
+                    <div class="stat-value" id="activeWorkers">0/0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Total Hashrate</div>
+                    <div class="stat-value" id="totalHashrate">0 MH/s</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Daily Earnings (Est.)</div>
+                    <div class="stat-value" id="dailyEarnings">0.00000000 BTC</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Total Rewards</div>
+                    <div class="stat-value" id="totalRewards">0.00000000 BTC</div>
+                </div>
+            </div>
+
+            <div class="actions-card">
+                <button class="btn btn-primary" id="addWorkerBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                    Add Worker
+                </button>
+            </div>
+        </div>
+
+        <div class="mining-content">
+            <div class="workers-section">
+                <div class="section-header">
+                    <h2 class="section-title">Mining Workers</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-sm btn-outline" id="refreshWorkersBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="workers-grid" id="workersGrid">
+                    <div class="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Loading workers...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rewards-section">
+                <div class="section-header">
+                    <h2 class="section-title">Mining Rewards</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-sm btn-outline" id="refreshRewardsBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="rewards-table-container">
+                    <table class="rewards-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Value (USD)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rewardsTableBody">
+                            <tr class="loading-row">
+                                <td colspan="4">
+                                    <div class="loading-spinner"></div>
+                                    <div class="loading-text">Loading rewards...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Worker Modal -->
+    <div class="modal" id="addWorkerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Worker</h3>
+                <button class="modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addWorkerForm">
+                    <div class="form-group">
+                        <label for="workerName">Worker Name</label>
+                        <input type="text" id="workerName" class="form-control" placeholder="e.g. Worker-01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hashrate">Hashrate (MH/s)</label>
+                        <input type="number" id="hashrate" class="form-control" min="1" max="10000" placeholder="e.g. 500" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="isActive" checked>
+                            <label for="isActive">Activate worker immediately</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <p class="form-help">
+                            Note: This is a simulation. Workers will generate mining rewards based on their hashrate.
+                        </p>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancelAddWorker">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Worker</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Worker Confirmation Modal -->
+    <div class="modal" id="deleteWorkerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Worker</h3>
+                <button class="modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this worker? This action cannot be undone.</p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="cancelDeleteWorker">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteWorker">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="mining.js"></script>
+</body>
+</html>

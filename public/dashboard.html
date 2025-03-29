@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Trading Desk</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">Trading Desk</div>
+        <ul class="navbar-menu">
+            <li><a href="#" class="nav-item active">Dashboard</a></li>
+            <li><a href="wallet.html" class="nav-item">Wallet</a></li>
+            <li><a href="trading.html" class="nav-item">Trading</a></li>
+            <li><a href="mining.html" class="nav-item">Mining</a></li>
+            <li><a href="#" class="nav-item">Portfolio</a></li>
+            <li><a href="#" class="nav-item">Settings</a></li>
+        </ul>
+        <div class="navbar-user">
+            <span class="user-name">Demo User</span>
+            <div class="user-avatar">D</div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Dashboard</h1>
+    </header>
+
+    <main class="container">
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                </div>
+                <div class="stat-data">
+                    <h3 class="stat-title">Portfolio Value</h3>
+                    <div class="stat-value" id="portfolioValue">$0.00</div>
+                    <div class="stat-change positive">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+                        <span id="portfolioChange">+0.00%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 3-3 3 3"/><path d="M13 18H7a2 2 0 0 1-2-2V6"/><path d="m22 15-3 3-3-3"/><path d="M11 6h6a2 2 0 0 1 2 2v10"/></svg>
+                </div>
+                <div class="stat-data">
+                    <h3 class="stat-title">Trading Volume</h3>
+                    <div class="stat-value" id="tradingVolume">$0.00</div>
+                    <div class="stat-change positive">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+                        <span id="volumeChange">+0.00%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.83 6.72 2.23"/><path d="M21 3v9h-9"/></svg>
+                </div>
+                <div class="stat-data">
+                    <h3 class="stat-title">Mining Rewards</h3>
+                    <div class="stat-value" id="miningRewards">0.0000 BTC</div>
+                    <div class="stat-change positive">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+                        <span id="rewardsChange">+0.00%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card market-overview-card">
+                <div class="card-header">
+                    <h2 class="card-title">Market Overview</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="market-table-container">
+                        <table class="market-table">
+                            <thead>
+                                <tr>
+                                    <th>Asset</th>
+                                    <th>Price</th>
+                                    <th>24h Change</th>
+                                    <th>Market Cap</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="marketTableBody">
+                                <!-- Market data will be loaded here -->
+                                <tr class="loading-row">
+                                    <td colspan="5">
+                                        <div class="loading-spinner"></div>
+                                        <div class="loading-text">Loading market data...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h2 class="card-title">Price Chart</h2>
+                    <div class="card-description">
+                        <span id="chartSymbol">BTC</span>/<span>USD</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="chart-header">
+                        <div class="chart-price-info">
+                            <div class="current-price" id="chartPrice">$0.00</div>
+                            <div class="price-change" id="chartPriceChange">
+                                <span class="change-value">+0.00%</span>
+                            </div>
+                        </div>
+                        <div class="chart-timeframes">
+                            <button class="timeframe-btn active" data-days="1">1D</button>
+                            <button class="timeframe-btn" data-days="7">1W</button>
+                            <button class="timeframe-btn" data-days="30">1M</button>
+                            <button class="timeframe-btn" data-days="90">3M</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                        <div class="loading-indicator" id="chartLoading">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Loading chart data...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card portfolio-card">
+                <div class="card-header">
+                    <h2 class="card-title">Portfolio Summary</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                            Add Asset
+                        </button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="portfolio-assets" id="portfolioAssets">
+                        <!-- Portfolio assets will be loaded here -->
+                        <div class="loading-indicator">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Loading portfolio data...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card transactions-card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Transactions</h2>
+                    <div class="card-actions">
+                        <a href="wallet.html" class="btn btn-sm btn-outline">
+                            View All
+                        </a>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="transactions-list" id="transactionsList">
+                        <!-- Transactions will be loaded here -->
+                        <div class="loading-indicator">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Loading transactions...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mining-card">
+                <div class="card-header">
+                    <h2 class="card-title">Mining Stats</h2>
+                    <div class="card-actions">
+                        <a href="mining.html" class="btn btn-sm btn-outline">
+                            View All
+                        </a>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="mining-stats">
+                        <div class="mining-stat">
+                            <div class="mining-stat-title">Active Workers</div>
+                            <div class="mining-stat-value" id="activeWorkers">0/0</div>
+                        </div>
+                        <div class="mining-stat">
+                            <div class="mining-stat-title">Hashrate</div>
+                            <div class="mining-stat-value" id="totalHashrate">0 MH/s</div>
+                        </div>
+                        <div class="mining-stat">
+                            <div class="mining-stat-title">24h Rewards</div>
+                            <div class="mining-stat-value" id="dailyRewards">0.0000 BTC</div>
+                        </div>
+                    </div>
+                    <div class="mining-workers" id="miningWorkers">
+                        <!-- Mining workers will be loaded here -->
+                        <div class="loading-indicator">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">Loading mining data...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

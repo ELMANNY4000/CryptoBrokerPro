@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading - Trading Desk</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="trading.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Trading Desk</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="dashboard.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="wallet.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>
+                            Wallet
+                        </a>
+                    </li>
+                    <li>
+                        <a href="portfolio.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            Portfolio
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="trading.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 3-3 3 3"></path><path d="M13 18H7a2 2 0 0 1-2-2V6"></path><path d="m22 15-3 3-3-3"></path><path d="M11 6h6a2 2 0 0 1 2 2v10"></path></svg>
+                            Trading
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mining.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17a1 1 0 1 0 2 0 1 1 0 0 0-2 0Z"></path><path d="M12 10V7"></path><path d="M20.42 9c-.14-.4-.36-.77-.66-1.1a4 4 0 0 0-6.24-4.84A4 4 0 0 0 12 3a4 4 0 0 0 0 8h8a2 2 0 0 0 .42-2Z"></path><path d="M12.55 16.97C12.4 17.72 11.74 18 11 18c-1.12 0-2-1.03-2-2.15 0-.58.03-1.24.1-1.85.02-.22.08-.45.16-.66 0 0 .44-.03 1.86-.16 1.08-.1 1.8-.33 1.8-.33.13.54.2 1.12.2 1.69 0 .58-.04 1.12-.12 1.64-.08.55-.23.79-.45.8Z"></path><path d="M15.03 14c-.19-.09-2.03.53-3.03.53-1 0-2.84-.62-3.03-.53"></path></svg>
+                            Mining
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logout-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button id="sidebar-toggle" class="sidebar-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <h1>Trading</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span id="user-name">Loading...</span>
+                        <div class="user-avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="trading-layout">
+                    <!-- Market Overview -->
+                    <section class="market-overview">
+                        <h2 class="section-title">Market Overview</h2>
+                        <div class="market-table-container">
+                            <table class="market-table">
+                                <thead>
+                                    <tr>
+                                        <th>Asset</th>
+                                        <th>Price</th>
+                                        <th>24h Change</th>
+                                        <th>Market Cap</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="market-table-body">
+                                    <tr>
+                                        <td colspan="5" class="loading-cell">
+                                            <div class="loading-spinner"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Trading Interface -->
+                    <section class="trading-interface">
+                        <div id="chart-container" class="chart-container">
+                            <div id="coin-info-header">
+                                <div class="coin-info-container">
+                                    <div id="selected-coin-icon" class="selected-coin-icon">BTC</div>
+                                    <div class="selected-coin-details">
+                                        <h3 id="selected-coin-name">Bitcoin</h3>
+                                        <div class="coin-price-container">
+                                            <span id="selected-coin-price">$0.00</span>
+                                            <span id="selected-coin-change" class="coin-change positive">+0.00%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="time-period-selector" id="time-period-selector">
+                                    <button class="time-btn active" data-period="1">24h</button>
+                                    <button class="time-btn" data-period="7">7d</button>
+                                    <button class="time-btn" data-period="30">30d</button>
+                                    <button class="time-btn" data-period="90">90d</button>
+                                    <button class="time-btn" data-period="365">1y</button>
+                                </div>
+                            </div>
+                            <canvas id="price-chart"></canvas>
+                            <div id="chart-loading" class="loading-spinner"></div>
+                        </div>
+                        
+                        <div class="trading-form-container">
+                            <div class="tabs">
+                                <button class="tab-btn active" data-tab="buy">Buy</button>
+                                <button class="tab-btn" data-tab="sell">Sell</button>
+                            </div>
+                            
+                            <div id="buy-tab" class="tab-content active">
+                                <form id="buy-form">
+                                    <div class="form-group">
+                                        <label for="buy-amount" class="form-label">Amount to Buy</label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" id="buy-amount" class="form-control" placeholder="0.00" step="0.00000001" min="0.00000001" required>
+                                            <span class="input-suffix" id="buy-currency">BTC</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="buy-total" class="form-label">Total Cost</label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" id="buy-total" class="form-control" placeholder="0.00" step="0.01" min="0.01" required>
+                                            <span class="input-suffix">USD</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="trading-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Available Balance:</span>
+                                            <span class="info-value" id="available-balance">$0.00</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Fee (0.3%):</span>
+                                            <span class="info-value" id="buy-fee">$0.00</span>
+                                        </div>
+                                        <div class="info-item total">
+                                            <span class="info-label">Total:</span>
+                                            <span class="info-value" id="buy-total-with-fee">$0.00</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-success full-width">Buy Now</button>
+                                </form>
+                            </div>
+                            
+                            <div id="sell-tab" class="tab-content">
+                                <form id="sell-form">
+                                    <div class="form-group">
+                                        <label for="sell-amount" class="form-label">Amount to Sell</label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" id="sell-amount" class="form-control" placeholder="0.00" step="0.00000001" min="0.00000001" required>
+                                            <span class="input-suffix" id="sell-currency">BTC</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="sell-total" class="form-label">Total Proceeds</label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" id="sell-total" class="form-control" placeholder="0.00" step="0.01" min="0.01" required>
+                                            <span class="input-suffix">USD</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="trading-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Available:</span>
+                                            <span class="info-value" id="available-crypto">0 BTC</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Fee (0.3%):</span>
+                                            <span class="info-value" id="sell-fee">$0.00</span>
+                                        </div>
+                                        <div class="info-item total">
+                                            <span class="info-label">Total:</span>
+                                            <span class="info-value" id="sell-total-with-fee">$0.00</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-danger full-width">Sell Now</button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Recent Transactions -->
+                <section class="recent-transactions">
+                    <h2 class="section-title">Your Recent Trading Activity</h2>
+                    <div class="transaction-list-container">
+                        <table class="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Asset</th>
+                                    <th>Amount</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-table-body">
+                                <tr>
+                                    <td colspan="6" class="loading-cell">
+                                        <div class="loading-spinner"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="common.js"></script>
+    <script src="trading.js"></script>
+</body>
+</html>

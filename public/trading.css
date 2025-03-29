@@ -1,0 +1,441 @@
+/* Trading Styles */
+
+/* Trading Layout */
+.trading-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Market Overview */
+.market-overview {
+    grid-column: 1 / 2;
+}
+
+.market-table-container {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.market-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.market-table th,
+.market-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.market-table th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    background-color: rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.market-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.market-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.coin-cell {
+    display: flex;
+    align-items: center;
+}
+
+.coin-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.coin-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.coin-name {
+    font-weight: 500;
+}
+
+.coin-symbol {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.market-price {
+    font-weight: 500;
+}
+
+.market-change {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+.market-change.positive {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.market-change.negative {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.market-cap {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.market-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.market-action-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-cell {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+/* Trading Interface */
+.trading-interface {
+    grid-column: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.chart-container {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: relative;
+    min-height: 300px;
+}
+
+#coin-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.coin-info-container {
+    display: flex;
+    align-items: center;
+}
+
+.selected-coin-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    margin-right: 1rem;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.selected-coin-details h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.coin-price-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#selected-coin-price {
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+.coin-change {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+}
+
+.coin-change.positive {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.coin-change.negative {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.time-period-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.time-btn {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.time-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+}
+
+.time-btn.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+#price-chart {
+    width: 100%;
+    height: 250px;
+}
+
+#chart-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.trading-form-container {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 1rem;
+    background-color: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.tab-btn:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text);
+}
+
+.tab-btn.active {
+    color: var(--text);
+    border-bottom: 2px solid var(--primary);
+}
+
+.tab-content {
+    padding: 1.5rem;
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.input-with-suffix {
+    position: relative;
+}
+
+.input-suffix {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.input-with-suffix .form-control {
+    padding-right: 3rem;
+}
+
+.trading-info {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-item.total {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border);
+    font-weight: 500;
+}
+
+.info-label {
+    color: var(--text-muted);
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Recent Transactions */
+.recent-transactions {
+    margin-bottom: 2rem;
+}
+
+.transaction-list-container {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    overflow-x: auto;
+}
+
+.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.transaction-table th,
+.transaction-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.transaction-table th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.transaction-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.transaction-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.transaction-type {
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    display: inline-block;
+}
+
+.transaction-type.buy {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.transaction-type.sell {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.transaction-amount {
+    font-weight: 500;
+}
+
+.transaction-price {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.transaction-total {
+    font-weight: 500;
+}
+
+.transaction-date {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .trading-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .market-overview,
+    .trading-interface {
+        grid-column: 1 / 2;
+    }
+}
+
+@media (max-width: 768px) {
+    #coin-info-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .time-period-selector {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    .market-table th:nth-child(4),
+    .market-table td:nth-child(4) {
+        display: none;
+    }
+}

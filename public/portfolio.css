@@ -1,0 +1,356 @@
+/* Portfolio Styles */
+
+/* Portfolio Summary */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary);
+}
+
+.summary-card.total-value::before {
+    background-color: var(--primary);
+}
+
+.summary-card.active-assets::before {
+    background-color: var(--info);
+}
+
+.summary-card.best-performer::before {
+    background-color: var(--success);
+}
+
+.summary-card.worst-performer::before {
+    background-color: var(--danger);
+}
+
+.summary-card-title {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+.summary-card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.summary-card.total-value .summary-card-value {
+    background: linear-gradient(90deg, var(--primary), #9d65ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.summary-card-change {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+.summary-card-change.positive {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.summary-card-change.negative {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.summary-card-asset {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Portfolio Allocation */
+.portfolio-allocation {
+    margin-bottom: 2rem;
+}
+
+.allocation-container {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.allocation-chart-container {
+    flex: 1;
+    min-width: 300px;
+    height: 300px;
+    position: relative;
+}
+
+#allocation-chart {
+    width: 100%;
+    height: 100%;
+}
+
+.allocation-legend {
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.legend-color {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 3px;
+    margin-right: 0.75rem;
+}
+
+.legend-label {
+    font-size: 0.875rem;
+    flex: 1;
+}
+
+.legend-value {
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.legend-percentage {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+}
+
+/* Asset List */
+.asset-list-section {
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#refresh-assets-btn {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+}
+
+#refresh-assets-btn svg {
+    margin-right: 0.5rem;
+}
+
+.asset-list-container {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.asset-list-header {
+    display: grid;
+    grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr;
+    padding: 1rem 1.5rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.asset-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.asset-item {
+    display: grid;
+    grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.asset-item:last-child {
+    border-bottom: none;
+}
+
+.asset-item:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.asset-coin {
+    display: flex;
+    align-items: center;
+}
+
+.coin-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.coin-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.coin-name {
+    font-weight: 500;
+}
+
+.coin-symbol {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.asset-price,
+.asset-holdings-value,
+.asset-value-amount {
+    font-weight: 500;
+}
+
+.asset-holdings-symbol {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-left: 0.25rem;
+}
+
+.asset-change-value {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+.asset-change-value.positive {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.asset-change-value.negative {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.asset-actions-container {
+    display: flex;
+    justify-content: center;
+}
+
+.asset-action-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+}
+
+.asset-action-btn:hover {
+    color: var(--text);
+}
+
+.asset-action-btn.view:hover {
+    color: var(--info);
+}
+
+.asset-action-btn.trade:hover {
+    color: var(--primary);
+}
+
+.empty-list {
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .asset-list-header,
+    .asset-item {
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .allocation-container {
+        flex-direction: column;
+    }
+    
+    .allocation-legend {
+        max-width: 100%;
+    }
+    
+    .asset-list-header,
+    .asset-item {
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 0.5fr;
+        font-size: 0.8rem;
+        padding: 1rem 0.75rem;
+    }
+    
+    .coin-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .asset-list-header,
+    .asset-item {
+        grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr;
+    }
+    
+    .asset-col.asset-change,
+    .asset-item > div:nth-child(5) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .asset-list-header,
+    .asset-item {
+        grid-template-columns: 2fr 1fr 1fr 0.5fr;
+    }
+    
+    .asset-col.asset-price,
+    .asset-item > div:nth-child(2) {
+        display: none;
+    }
+}
